@@ -1,6 +1,6 @@
 from typing import List
 import geopandas as gpd
-from Storm import Storm
+from storm import Storm
 
 def run_analysis(dataset_file_path: str, 
                  state_gdf: gpd.GeoDataFrame, 
