@@ -14,6 +14,30 @@ class AnalysisApp(tk.Tk):
     A Tkinter GUI application for running the hurricane analysis and displaying the results.
     """
     def __init__(self) -> None:
+        """
+        Initializes the Hurricane Analysis application window with various input fields, buttons, and a table.
+
+        The window is set up with a title and a predefined size. It contains input fields for the dataset file path,
+        shapefile path, minimum year, maximum year, and the method of analysis (point or line). It also includes browse
+        buttons for selecting the dataset and shapefile, a button to run the analysis, and a scrollable table to display
+        the results.
+
+        The shapefile is read and dissolved into a single geometry, and an error message is printed if there is an issue
+        loading the shapefile. The table for displaying results is set up within a canvas with both vertical and horizontal
+        scrollbars.
+
+        Attributes:
+            dataset_file_path (tk.StringVar): Variable to store the path of the dataset file.
+            shapefile_path (tk.StringVar): Variable to store the path of the shapefile.
+            min_year (tk.IntVar): Variable to store the minimum year for analysis.
+            max_year (tk.IntVar): Variable to store the maximum year for analysis.
+            method (tk.StringVar): Variable to store the selected method of analysis (point or line).
+            state_gdf (geopandas.GeoDataFrame): GeoDataFrame to store the dissolved shapefile geometry.
+            canvas (tk.Canvas): Canvas widget to hold the table for displaying results.
+            v_scrollbar (tk.Scrollbar): Vertical scrollbar for the canvas.
+            h_scrollbar (tk.Scrollbar): Horizontal scrollbar for the canvas.
+            table_frame (tk.Frame): Frame widget to hold the contents of the table.
+        """
         super().__init__() # Initialize the superclass
         self.title("Hurricane Analysis") # Set the title of the window
         self.geometry("648x864")  # Set the size of the window

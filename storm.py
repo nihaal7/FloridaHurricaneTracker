@@ -3,7 +3,6 @@ from typing import List, Optional
 import geopandas as gpd
 from shapely.geometry import (GeometryCollection, LineString, MultiLineString,
                               MultiPoint, Point)
-
 from reading import Reading
 
 
@@ -12,7 +11,21 @@ class Storm:
     A class for storing and processing information about a storm from the HURDAT2 dataset.
     """
     def __init__(self) -> None:
-        # Initialize attributes for each storm
+        """
+        Initializes a new Storm instance.
+
+        Attributes:
+            code (Optional[str]): Code of the storm.
+            name (Optional[str]): Name of the storm.
+            count (Optional[int]): Number of readings for the storm.
+            basin (Optional[str]): Basin in which the storm occurred.
+            cyclone_number (Optional[int]): Cyclone number of the storm.
+            year (Optional[int]): Year of the storm.
+            readings (Optional[List[Reading]]): List of readings for the storm.
+            intersection_point (Optional[Point]): Intersection point with the state.
+            max_wind_speed (Optional[int]): Maximum wind speed (calculated later).
+            intersection_time (Optional[str]): Intersection time (calculated later).
+        """
         self.code: Optional[str] = None  # Code of the storm
         self.name: Optional[str] = None  # Name of the storm
         self.count: Optional[int] = None  # Number of readings for the storm

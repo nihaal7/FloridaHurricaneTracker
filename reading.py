@@ -7,9 +7,18 @@ class Reading:
     Each reading represents a single observation of a storm at a specific time.
     """
     def __init__(self) -> None:
-        # Initialize instance variables
+        """
+        Initializes a new Reading instance.
+
+        Attributes:
+            datetime (Optional[datetime]): The date and time of the reading.
+            msw_kts (Optional[float]): Max Sustained Wind speed in knots.
+            lat (Optional[float]): Latitude of the reading.
+            long (Optional[float]): Longitude of the reading.
+            status (Optional[str]): Status of the reading (e.g., 'HU' for hurricane, 'TD' for tropical depression).
+        """
         self.datetime: Optional[datetime] = None   # Date and time of the reading
-        self.msw_kts: Optional[float] = None       # Wind speed in knots
+        self.msw_kts: Optional[float] = None       # Max Sustained Wind speed in knots
         self.lat: Optional[float] = None           # Latitude
         self.long: Optional[float] = None          # Longitude
         self.status: Optional[str] = None          # Status of the reading (e.g., 'HU', 'TD')
