@@ -52,6 +52,8 @@ python app.py
 
 **GUI:** Features a user-friendly graphical interface for easy interaction and visualization of results.
 
+![image](https://github.com/nihaal7/FloridaHurricaneTracker/assets/40913961/6bf35456-4c5b-4f18-80bd-58dd7385e4b0)
+
 ## Usage
 
 The project is designed to be accessible and easy to use. Users can input parameters, run the analysis, and view the results through the GUI. The interface allows for the selection of datasets, specification of year range, and choice of landfall detection method.
