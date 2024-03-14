@@ -15,7 +15,7 @@ class AnalysisApp(tk.Tk):
     def __init__(self) -> None:
         super().__init__() # Initialize the superclass
         self.title("Hurricane Analysis") # Set the title of the window
-        self.geometry("600x400")  # Set the size of the window
+        self.geometry("648x864")  # Set the size of the window
 
         # Input fields with default values
         self.dataset_file_path = tk.StringVar(value=r"Data\hurdat2-atl-02052024.txt")  # Dataset file path
@@ -91,6 +91,7 @@ class AnalysisApp(tk.Tk):
                 self.state_gdf = gpd.read_file(file_path) # Read the shapefile
                 self.state_gdf = self.state_gdf.dissolve() # Dissolve the shapefile into a single geometry
             except Exception as e:
+                # If an exception occurs, set state_gdf to None and print an error message
                 self.state_gdf = None
                 print(f"Error loading shapefile: {e}")
 
@@ -108,9 +109,9 @@ class AnalysisApp(tk.Tk):
 
         popup_window = tk.Toplevel() # Create a new top-level window
         popup_window.title(storm_info) # Set the title of the popup window
-        popup_window.geometry("1280x960") # Set the size of the popup window
+        popup_window.geometry("600x600") # Set the size of the popup window
 
-        fig, ax = plt.subplots() # Create a figure and axes for the plot
+        fig, ax = plt.subplots(figsize=(8, 6)) # Create a figure and axes for the plot
         lats = [reading.lat for reading in storm.readings] # Extract latitudes from the storm's readings
         longs = [reading.long for reading in storm.readings] # Extract longitudes from the storm's readings
         
@@ -135,16 +136,22 @@ class AnalysisApp(tk.Tk):
         # Plot the calculated landfall point
         ax.scatter(storm.intersection_point.x, storm.intersection_point.y, color='yellow', zorder=4, label='Calculated Landfall',marker = 'x')
 
-        ax.legend()  # Add a legend to the plot  
+        ax.legend()  # Add a legend to the plot
     
         ax.set_xlabel('Longitude (°)') # Set the label for the x-axis
         ax.set_ylabel('Latitude (°)') # Set the label for the y-axis
+
+        ax.set_title(storm_info)  # Set the title of the plot
      
+        # Calculate the dimensions for the canvas widget
+        canvas_width = int(popup_window.winfo_width() * 0.8)
+        canvas_height = int(popup_window.winfo_height() * 0.8)
+
         canvas = FigureCanvasTkAgg(fig, master=popup_window) # Create a canvas widget and display the plot in the popup window
         canvas.draw()  # Draw the figure on the canvas
         canvas.get_tk_widget().pack() # Pack the canvas widget in the popup window
         
-        tk.Label(popup_window, text=storm_info).pack()  # Add a label with the storm's name and year to the popup window
+        # tk.Label(popup_window, text=storm_info).pack()  # Add a label with the storm's name and year to the popup window
 
     def find_hurricanes_making_landfall(self) -> None:
         """
@@ -181,27 +188,35 @@ class AnalysisApp(tk.Tk):
                 # Clear the previous table contents
                 for widget in self.table_frame.winfo_children(): 
                     widget.destroy()
-                headings = ["Name", "WindSpeed", "Landfall", "Grapher"]
-                
+                          
                  # Create labels for the table headings
+                headings = ["Name", "Max Wind Speed (knots)", "Landfall Date/Time", "Grapher"]
                 for j, heading in enumerate(headings):
                     tk.Label(self.table_frame, text=heading, borderwidth=1, relief="solid",  font=tkFont.Font(weight="bold")).grid(row=0, column=j, sticky="nsew")
                 
                 for i, storm in enumerate(table, start=1): # Iterate over the rows in the table
-                    name_entry  = tk.Entry(self.table_frame, borderwidth=1, relief="solid") # Create an entry widget for each value
+                    name_entry  = tk.Entry(self.table_frame, borderwidth=1, relief="solid", justify="center") # Create an entry widget for each value
                     name_entry.insert(0, storm.name) # Place the entry widget in the table
                     name_entry.grid(row=i, column=0, sticky="nsew")            
                     
-                    max_wind_speed_entry = tk.Entry(self.table_frame, borderwidth=1, relief="solid")
+                    max_wind_speed_entry = tk.Entry(self.table_frame, borderwidth=1, relief="solid", justify="center")
                     max_wind_speed_entry.insert(0, str(storm.max_wind_speed)) # Place the entry widget in the table
                     max_wind_speed_entry.grid(row=i, column=1, sticky="nsew")  
                     
-                    intersection_time_entry = tk.Entry(self.table_frame, borderwidth=1, relief="solid")
+                    intersection_time_entry = tk.Entry(self.table_frame, borderwidth=1, relief="solid", justify="center")
                     intersection_time_entry.insert(0, str(storm.intersection_time))
                     intersection_time_entry.grid(row=i, column=2, sticky="nsew") 
 
                     # Create a button to open the popup window for each storm
-                    tk.Button(self.table_frame, text="Click to Graph!", command=lambda r=storm: self.display_storm_plot(r), borderwidth=1, relief="solid").grid(row=i, column=3, sticky="nsew")        
+                    tk.Button(
+                        self.table_frame, 
+                        text="Click to Graph!", 
+                        command=lambda r=storm: self.display_storm_plot(r), 
+                        borderwidth=1, 
+                        relief="solid", 
+                        bg="grey",  
+                        foreground="white"
+                    ).grid(row=i, column=3, sticky="nsew")        
                 
                 self.table_frame.update_idletasks()  # Update the layout of the table frame
                 self.canvas.config(scrollregion=self.canvas.bbox("all"))  # Update the scroll region of the canvas

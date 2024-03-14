@@ -77,18 +77,19 @@ class Storm:
             print(f"Error while checking if hurricane: {e}")
         return False # Return False if no reading has status 'HU'
                   
-    def calculate_max_wind_speed(self) -> None:
+    def calculate_max_wind_speed(self) -> int:
         """
         Calculate the maximum wind speed (in knots) among all readings of the storm.
 
         Returns:
-        - None
+        - int: Maximum wind speed
         """
         try:
-            self.max_wind_speed = max(reading.msw_kts for reading in self.readings)
+            #Iterate over readings and return max wind speed
+            return max(reading.msw_kts for reading in self.readings)
         except Exception as e:
             print(f"Error while calculating max wind speed: {e}")
-            self.max_wind_speed = 0
+            return 0
     
     def check_point_intersection(self, state_gdf: gpd.GeoDataFrame) -> bool:
         """
@@ -110,7 +111,7 @@ class Storm:
                 #If point lies inside state geometry
                 if state_gdf.contains(point).any():
                     self.intersection_point = point  # Set the intersection point
-                    self.calculate_max_wind_speed() # Calculate the maximum wind speed
+                    self.max_wind_speed = self.calculate_max_wind_speed() # Calculate the maximum wind speed
                     self.intersection_time = reading.datetime # Set the intersection datetime
                     return True # Return True because found intersection
         
@@ -175,7 +176,7 @@ class Storm:
                     self.intersection_point = intersection_point     
                     
                     # Calculate the maximum wind speed of the storm.
-                    self.calculate_max_wind_speed()
+                    self.max_wind_speed = self.calculate_max_wind_speed() 
                 
                     # Interpolate the time of intersection based on the line segment and intersection point.
                     self.intersection_time = self.interpolate_time_line_intersection(reading_1, reading_2, intersection_point)
@@ -183,7 +184,8 @@ class Storm:
                     return True #Return True because found intersection
         except Exception as e:
             print(f"Error while checking line intersection: {e}")
-        return False #Return False due to exception or no intersection
+            return False #Return False due to exception
+        return False #Return False due to no intersection
 
     def interpolate_time_line_intersection(self, reading_1: Reading, reading_2: Reading, intersection_point: Point) -> datetime:
         """
