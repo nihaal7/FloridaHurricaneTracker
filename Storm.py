@@ -139,11 +139,11 @@ class Storm:
                 
             # Iterate over each pair of consecutive points in the storm path.
             for i in range(self.count-1):
-                reading1 = self.readings[i] # Get the first reading of the pair
-                reading2 = self.readings[i+1] # Get the second reading of the pair
+                reading_1 = self.readings[i] # Get the first reading of the pair
+                reading_2 = self.readings[i+1] # Get the second reading of the pair
 
                 # Create LineString from two consecutive points
-                line_segment = LineString([(reading1.long, reading1.lat), (reading2.long, reading2.lat)])
+                line_segment = LineString([(reading_1.long, reading_1.lat), (reading_2.long, reading_2.lat)])
 
                 # Check if the line intersects the state geometry
                 intersection_point = state_gdf.intersection(line_segment).any()
@@ -179,20 +179,20 @@ class Storm:
                     self.calculate_max_wind_speed()
                 
                     # Interpolate the time of intersection based on the line segment and intersection point.
-                    self.intersection_time = self.interpolate_time_line_intersection(reading1, reading2, intersection_point)
+                    self.intersection_time = self.interpolate_time_line_intersection(reading_1, reading_2, intersection_point)
                     
                     return True #Return True because found intersection
         except Exception as e:
             print(f"Error while checking line intersection: {e}")
         return False #Return False due to exception or no intersection
 
-    def interpolate_time_line_intersection(self,reading1, reading2, intersection_point):
+    def interpolate_time_line_intersection(self, reading_1, reading_2, intersection_point):
         """
         Interpolate the time of intersection between a line segment of the storm's path and the state geometry.
 
         Parameters:
-        - reading1 (Reading): The first reading of the line segment.
-        - reading2 (Reading): The second reading of the line segment.
+        - reading_1 (Reading): The first reading of the line segment.
+        - reading_2 (Reading): The second reading of the line segment.
         - intersection_point (shapely.geometry.Point): The intersection point between the line segment and the state geometry.
 
         Returns:
@@ -200,8 +200,8 @@ class Storm:
         """
         try:
             # Calculate the distances between the points
-            distance_1_to_intersection = ((intersection_point.x - reading1.long)**2 + (intersection_point.y - reading1.lat)**2)**0.5
-            distance_2_to_intersection = ((intersection_point.x - reading2.long)**2 + (intersection_point.y - reading2.lat)**2)**0.5
+            distance_1_to_intersection = ((intersection_point.x - reading_1.long)**2 + (intersection_point.y - reading_1.lat)**2)**0.5
+            distance_2_to_intersection = ((intersection_point.x - reading_2.long)**2 + (intersection_point.y - reading_2.lat)**2)**0.5
             
             # Calculate the total distance between the two readings
             total_distance = distance_1_to_intersection + distance_2_to_intersection
@@ -210,10 +210,10 @@ class Storm:
             ratio = distance_1_to_intersection / total_distance
 
             # Calculate the time difference between dt1 and dt2
-            time_difference = reading2.datetime - reading1.datetime
+            time_difference = reading_2.datetime - reading_1.datetime
 
             # Interpolate the timestamp for the intersection point
-            intersection_timestamp = reading1.datetime + ratio * time_difference
+            intersection_timestamp = reading_1.datetime + ratio * time_difference
 
             # Return the interpolated timestamp
             return intersection_timestamp

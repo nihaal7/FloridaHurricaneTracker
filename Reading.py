@@ -84,7 +84,7 @@ class Reading:
             print(f"Error converting coordinates '{latitude}', '{longitude}': {e}")
             return None, None # Return None to indicate an error
     
-    def parse_date_time(self,datestamp, timestamp):      
+    def parse_date_time(self, datestamp, timestamp):      
         """
         Parse date and time components into a datetime object.
 
