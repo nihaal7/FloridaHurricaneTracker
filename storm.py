@@ -4,7 +4,7 @@ import geopandas as gpd
 from shapely.geometry import (GeometryCollection, LineString, MultiLineString,
                               MultiPoint, Point)
 
-from Reading import Reading
+from reading import Reading
 
 
 class Storm:
