@@ -1,22 +1,18 @@
-from shapely.geometry import shape, Point, LineString, MultiPoint, MultiLineString, GeometryCollection
 import geopandas as gpd
 import matplotlib.pyplot as plt
-from datetime import datetime
 import tkinter as tk
 from tkinter import ttk
 from tkinter import filedialog
 import tkinter.font as tkFont
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-
 from Storm import Storm
-from Reading import Reading
 from Run_analysis import run_analysis
 
 class AnalysisApp(tk.Tk):
     """
     A Tkinter GUI application for running the hurricane analysis and displaying the results.
     """
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__() # Initialize the superclass
         self.title("Hurricane Analysis") # Set the title of the window
         self.geometry("600x400")  # Set the size of the window
@@ -71,7 +67,7 @@ class AnalysisApp(tk.Tk):
         self.grid_rowconfigure(6, weight=1)
         self.grid_columnconfigure(0, weight=1)   
 
-    def browse_file(self, file_type):
+    def browse_file(self, file_type: str) -> None:
         """
         Open a file dialog and set the file path for the selected file type (dataset or shapefile).
 
@@ -80,9 +76,7 @@ class AnalysisApp(tk.Tk):
 
         Returns:
         - None
-        """
-        # Open a file dialog and set the file path for the selected file type
-        
+        """      
         # Open a file dialog and get the selected file path
         file_path = filedialog.askopenfilename()
         
@@ -100,7 +94,7 @@ class AnalysisApp(tk.Tk):
                 self.state_gdf = None
                 print(f"Error loading shapefile: {e}")
 
-    def display_storm_plot(self, storm):
+    def display_storm_plot(self, storm: Storm) -> None:
         """
         Open a popup window with a plot of the storm's path and the intersection point with the state.
 
@@ -109,8 +103,7 @@ class AnalysisApp(tk.Tk):
 
         Returns:
         - None
-        """
-        
+        """        
         storm_info = f"{storm.name} {storm.year}" # Combine the storm's name and year into a single string, for labelling
 
         popup_window = tk.Toplevel() # Create a new top-level window
@@ -153,8 +146,16 @@ class AnalysisApp(tk.Tk):
         
         tk.Label(popup_window, text=storm_info).pack()  # Add a label with the storm's name and year to the popup window
 
-    def find_hurricanes_making_landfall(self):
-        # Run the calculations and display the results in the table
+    def find_hurricanes_making_landfall(self) -> None:
+        """
+        Run the calculations and display the results in the table.
+
+        Parameters:
+        - None
+
+        Returns:
+        - None
+        """   
         dataset_file_path = self.dataset_file_path.get() # Get the dataset file path
         min_year = self.min_year.get() # Get the minimum year
         max_year = self.max_year.get() # Get the maximum year

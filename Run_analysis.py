@@ -1,17 +1,12 @@
-from shapely.geometry import shape, Point, LineString, MultiPoint, MultiLineString, GeometryCollection
+from typing import List
 import geopandas as gpd
-import matplotlib.pyplot as plt
-from datetime import datetime
-import tkinter as tk
-from tkinter import ttk
-from tkinter import filedialog
-import tkinter.font as tkFont
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-
 from Storm import Storm
-from Reading import Reading
 
-def run_analysis(dataset_file_path, state_gdf, min_year, max_year, method):
+def run_analysis(dataset_file_path: str, 
+                 state_gdf: gpd.GeoDataFrame, 
+                 min_year: int, 
+                 max_year: int, 
+                 method: str) -> List[Storm]:
     """
     Run the analysis to identify hurricanes that made landfall in the specified state within a given year range.
 
@@ -25,7 +20,6 @@ def run_analysis(dataset_file_path, state_gdf, min_year, max_year, method):
     Returns:
     - list: A list of Storm instances that made landfall in the specified state within the given year range.
     """
-    
     # Initialize a list to store the final results
     landfall_hurricanes  = []
     
@@ -37,9 +31,8 @@ def run_analysis(dataset_file_path, state_gdf, min_year, max_year, method):
                 line = file.readline()
                 
                 if not line:
-                    # Break the loop if the end of the file is reached
-                    break
-                
+                    break # Break the loop if the end of the file is reached
+                    
                 # Create a new Storm object
                 storm = Storm()
                 
@@ -48,12 +41,8 @@ def run_analysis(dataset_file_path, state_gdf, min_year, max_year, method):
                 
                 # Iterate over the number of readings for the storm
                 for i in range(storm.count):
-                    # Create a new Reading object
-                    reading = Reading()
                     # Populate the reading's attributes
-                    reading.read_values(file.readline())
-                    # Assign the reading to the storm's readings list
-                    storm.readings[i] = reading
+                    storm.readings[i].read_values(file.readline())
                     
                 # Check if the storm's year is within the specified range
                 if storm.year < min_year or storm.year > max_year:

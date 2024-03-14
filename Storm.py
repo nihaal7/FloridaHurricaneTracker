@@ -1,34 +1,30 @@
-from shapely.geometry import shape, Point, LineString, MultiPoint, MultiLineString, GeometryCollection
-import geopandas as gpd
-import matplotlib.pyplot as plt
 from datetime import datetime
-import tkinter as tk
-from tkinter import ttk
-from tkinter import filedialog
-import tkinter.font as tkFont
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from typing import List, Optional
+import geopandas as gpd
+from shapely.geometry import (GeometryCollection, LineString, MultiLineString,
+                              MultiPoint, Point)
 
 from Reading import Reading
+
 
 class Storm:
     """
     A class for storing and processing information about a storm from the HURDAT2 dataset.
     """
-
-    def __init__(self):
+    def __init__(self) -> None:
         # Initialize attributes for each storm
-        self.code = None # Code of the storm
-        self.name = None # Name of the storm
-        self.count = None # Number of readings for the storm
-        self.basin = None # Basin in which the storm occurred
-        self.cyclone_number = None # Cyclone number of the storm
-        self.year = None # Year of the storm
-        self.readings = None # List of readings for the storm
-        self.intersection_point = None # Intersection point with the state
-        self.max_wind_speed = None # Max Wind Speed (Calculated Later)
-        self.intersection_time = None # Intersecion Point (Calculated Later)
+        self.code: Optional[str] = None  # Code of the storm
+        self.name: Optional[str] = None  # Name of the storm
+        self.count: Optional[int] = None  # Number of readings for the storm
+        self.basin: Optional[str] = None  # Basin in which the storm occurred
+        self.cyclone_number: Optional[int] = None  # Cyclone number of the storm
+        self.year: Optional[int] = None  # Year of the storm
+        self.readings: Optional[List[Reading]] = None  # List of readings for the storm
+        self.intersection_point: Optional[Point] = None # Intersection point with the state
+        self.max_wind_speed: Optional[int] = None # Max Wind Speed (Calculated Later)
+        self.intersection_time: Optional[str] = None # Intersecion Point (Calculated Later)
 
-    def read_values(self, line):
+    def read_values(self, line: str) -> None:
         """
         Parse a line from the HURDAT2 dataset and populate the attributes of the Storm instance.
 
@@ -38,9 +34,9 @@ class Storm:
         Returns:
         - None
         """
-
         try:
-            self.code, self.name, self.count, _ = line.strip().split(',') # Split the line by comma and assign values
+             # Split the line by comma and assign values
+            self.code, self.name, self.count, _ = line.strip().split(',')
             
             self.code = self.code.strip() # Strip whitespace from the code
             self.basin = self.code[0:2].strip() # Extract basin from the code
@@ -49,11 +45,11 @@ class Storm:
             
             self.name = self.name.strip() # Strip whitespace from the name
             self.count = int(self.count) # Convert count to integer
-            self.readings = [0] * self.count # Initialize the readings list with zeros
+            self.readings = [Reading() for i in range(self.count)] # Initialize the readings list
         except Exception as e:
             print(f"Error while reading values: {e}")
     
-    def sort_readings(self):
+    def sort_readings(self) -> None:
         """
         Sort the readings of the storm by datetime in ascending order.
 
@@ -65,16 +61,15 @@ class Storm:
         except Exception as e:
             print(f"Error while sorting readings: {e}")
     
-    def is_hurricane(self):
+    def is_hurricane(self) -> bool:
         """
         Check if the storm is classified as a hurricane based on its readings.
 
         Returns:
         - bool: True if the storm is a hurricane, False otherwise.
         """
-
-        # Check if the storm is a hurricane (status 'HU')
         try:
+            #Iterate over readings
             for reading in self.readings:
                 if reading.status == 'HU': # Return True if any reading has status 'HU' (hurricane)
                     return True
@@ -82,7 +77,7 @@ class Storm:
             print(f"Error while checking if hurricane: {e}")
         return False # Return False if no reading has status 'HU'
                   
-    def calculate_max_wind_speed(self):
+    def calculate_max_wind_speed(self) -> None:
         """
         Calculate the maximum wind speed (in knots) among all readings of the storm.
 
@@ -93,9 +88,9 @@ class Storm:
             self.max_wind_speed = max(reading.msw_kts for reading in self.readings)
         except Exception as e:
             print(f"Error while calculating max wind speed: {e}")
-            return 0
+            self.max_wind_speed = 0
     
-    def check_point_intersection(self, state_gdf):
+    def check_point_intersection(self, state_gdf: gpd.GeoDataFrame) -> bool:
         """
         Check if any point of the storm's path lies inside the specified state geometry.
 
@@ -107,18 +102,23 @@ class Storm:
         If True, also sets the values of  `max_wind_speed` and `intersection_time` attributes.
         """
         try:
+            #Iterate through readings
             for reading in self.readings:
-                point = Point(reading.long, reading.lat) # Create a point from the reading's longitude and latitude
+                # Create a point from the reading's longitude and latitude
+                point = Point(reading.long, reading.lat)
+                
+                #If point lies inside state geometry
                 if state_gdf.contains(point).any():
                     self.intersection_point = point  # Set the intersection point
                     self.calculate_max_wind_speed() # Calculate the maximum wind speed
                     self.intersection_time = reading.datetime # Set the intersection datetime
                     return True # Return True because found intersection
+        
         except Exception as e:
             print(f"Error while checking point intersection: {e}")
         return False #Return False due to exception or no intersection
                  
-    def check_line_intersection(self, state_gdf):
+    def check_line_intersection(self, state_gdf: gpd.GeoDataFrame) -> bool:
         """
         Check if any line segment of the storm's path intersects with the specified state geometry.
 
@@ -129,7 +129,6 @@ class Storm:
         - bool: True if there is an intersection, False otherwise.
         If True, also sets the values of  `max_wind_speed` and `intersection_time` attributes.
         """
-
         try:
             first_reading = Point(self.readings[0].long, self.readings[0].lat) # Create a point from the first reading's coordinates
             
@@ -186,7 +185,7 @@ class Storm:
             print(f"Error while checking line intersection: {e}")
         return False #Return False due to exception or no intersection
 
-    def interpolate_time_line_intersection(self, reading_1, reading_2, intersection_point):
+    def interpolate_time_line_intersection(self, reading_1: Reading, reading_2: Reading, intersection_point: Point) -> datetime:
         """
         Interpolate the time of intersection between a line segment of the storm's path and the state geometry.
 
