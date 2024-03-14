@@ -19,8 +19,8 @@ class AnalysisApp(tk.Tk):
         self.geometry("648x864")  # Set the size of the window
 
         # Input fields with default values
-        self.dataset_file_path = tk.StringVar(value=os.path.join("Data", "hurdat2-atl-02052024.txt")) # Dataset file path
-        self.shapefile_path = tk.StringVar(value=os.path.join("Data", "cb_2018_12_bg_500k.shp"))  # Shapefile path
+        self.dataset_file_path = tk.StringVar(value=os.path.join("data", "hurdat2-atl-02052024.txt")) # Dataset file path
+        self.shapefile_path = tk.StringVar(value=os.path.join("data", "cb_2018_12_bg_500k.shp"))  # Shapefile path
 
         self.min_year = tk.IntVar(value=1900) # Minimum year
         self.max_year = tk.IntVar(value=2022)  # Maximum year
