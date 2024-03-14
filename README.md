@@ -34,12 +34,25 @@ The application expects these files to be present in order to function properly.
 python app.py
 ```
 
-#Features
+## Features
 
-Features
-Data Parsing: Efficiently parses HURDAT2 dataset to extract relevant information about each storm.
-Filtering: Identifies storms classified as hurricanes and filters them based on the year of occurrence.
-Landfall Detection: Employs both point and line methods to accurately determine if a hurricane has made landfall in Florida.
-Max Wind Speed Calculation: Determines the maximum wind speed for each hurricane to assess its intensity.
-Output Generation: Generates a comprehensive report listing the name, date of landfall, and maximum wind speed for each identified hurricane.
-GUI: Features a user-friendly graphical interface for easy interaction and visualization of results.
+**Data Parsing:** Efficiently parses HURDAT2 dataset to extract relevant information about each storm.
+
+**Filtering:** Identifies storms classified as hurricanes and filters them based on the year of occurrence.
+
+**Landfall Detection:** Employs both point and line methods to accurately determine if a hurricane has made landfall in Florida.
+
+**Max Wind Speed Calculation:** Determines the maximum wind speed for each hurricane to assess its intensity.
+
+**Output Generation:** Generates a comprehensive report listing the name, date of landfall, and maximum wind speed for each identified hurricane.
+
+**Storm Path Visualization:** Provides graphical representation of each hurricane's path, allowing for easy visualization of its trajectory and landfall.
+
+**GUI:** Features a user-friendly graphical interface for easy interaction and visualization of results.
+
+## Usage
+
+The project is designed to be accessible and easy to use. Users can input parameters, run the analysis, and view the results through the GUI. The interface allows for the selection of datasets, specification of year range, and choice of landfall detection method.
+
+## Contact
+For any questions or suggestions, please contact Nihaal Subhash at nihaal.subhash@gmail.com.
