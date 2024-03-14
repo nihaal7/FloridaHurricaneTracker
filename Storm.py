@@ -207,7 +207,8 @@ class Storm:
         - state_gdf (geopandas.GeoDataFrame): The geometry of the state to check for intersection.
 
         Returns:
-        - bool: True if there is an intersection, False otherwise.
+        - bool: True if there is an intersection, False otherwise. 
+        If True, also sets the values of  `max_wind_speed` and `intersection_time` attributes.
         """
         try:
             for reading in self.readings:
@@ -230,6 +231,7 @@ class Storm:
 
         Returns:
         - bool: True if there is an intersection, False otherwise.
+        If True, also sets the values of  `max_wind_speed` and `intersection_time` attributes.
         """
 
         try:
