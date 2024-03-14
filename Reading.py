@@ -23,9 +23,9 @@ class Reading:
 
         Returns:
         - None
-        """
-        # Split the line into a list of values
+        """        
         try:
+            # Split the line into a list of values
             line = line.strip().split(',')
 
             #Strip any leading or trailing whitespaces

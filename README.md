@@ -2,7 +2,7 @@
 
 ## KCC – Software Development Technical Assignment
 
-**Task:** The NOAA Best Track Data (HURDAT2) contains historical data on storms, including their paths and intensities. The objective of this analysis is to identify all hurricanes that have made landfall in Florida since 1900 and to generate a report listing their names, dates of landfall, and maximum wind speeds.
+**Task:** The objective of this analysis is to identify all hurricanes that have made landfall in Florida since 1900 and to generate a report listing their names, dates of landfall, and maximum wind speeds. This is performed using the NOAA Best Track Data (HURDAT2) dataset, which contains historical data on storms, including their paths and intensities.
 
 https://github.com/nihaal7/FloridaHurricaneTracker/assets/40913961/b0f82b87-4312-4ecb-942e-e22e407226b6
 

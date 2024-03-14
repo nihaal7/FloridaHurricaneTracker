@@ -7,6 +7,7 @@ import tkinter.font as tkFont
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from Storm import Storm
 from Run_analysis import run_analysis
+import os
 
 class AnalysisApp(tk.Tk):
     """
@@ -18,8 +19,9 @@ class AnalysisApp(tk.Tk):
         self.geometry("648x864")  # Set the size of the window
 
         # Input fields with default values
-        self.dataset_file_path = tk.StringVar(value=r"Data\hurdat2-atl-02052024.txt")  # Dataset file path
-        self.shapefile_path = tk.StringVar(value=r"Data\cb_2018_12_bg_500k.shp")       # Shapefile path
+        self.dataset_file_path = tk.StringVar(value=os.path.join("Data", "hurdat2-atl-02052024.txt")) # Dataset file path
+        self.shapefile_path = tk.StringVar(value=os.path.join("Data", "cb_2018_12_bg_500k.shp"))  # Shapefile path
+
         self.min_year = tk.IntVar(value=1900) # Minimum year
         self.max_year = tk.IntVar(value=2022)  # Maximum year
         self.method = tk.StringVar(value="point") # Method (point or line)
@@ -151,8 +153,6 @@ class AnalysisApp(tk.Tk):
         canvas.draw()  # Draw the figure on the canvas
         canvas.get_tk_widget().pack() # Pack the canvas widget in the popup window
         
-        # tk.Label(popup_window, text=storm_info).pack()  # Add a label with the storm's name and year to the popup window
-
     def find_hurricanes_making_landfall(self) -> None:
         """
         Run the calculations and display the results in the table.
@@ -194,13 +194,15 @@ class AnalysisApp(tk.Tk):
                 for j, heading in enumerate(headings):
                     tk.Label(self.table_frame, text=heading, borderwidth=1, relief="solid",  font=tkFont.Font(weight="bold")).grid(row=0, column=j, sticky="nsew")
                 
-                for i, storm in enumerate(table, start=1): # Iterate over the rows in the table
-                    name_entry  = tk.Entry(self.table_frame, borderwidth=1, relief="solid", justify="center") # Create an entry widget for each value
-                    name_entry.insert(0, storm.name) # Place the entry widget in the table
+                # Iterate over the rows in the table
+                for i, storm in enumerate(table, start=1): 
+                    # Create an entry widget for each value, and place the entry widgets in the table
+                    name_entry  = tk.Entry(self.table_frame, borderwidth=1, relief="solid", justify="center") 
+                    name_entry.insert(0, storm.name) 
                     name_entry.grid(row=i, column=0, sticky="nsew")            
                     
                     max_wind_speed_entry = tk.Entry(self.table_frame, borderwidth=1, relief="solid", justify="center")
-                    max_wind_speed_entry.insert(0, str(storm.max_wind_speed)) # Place the entry widget in the table
+                    max_wind_speed_entry.insert(0, str(storm.max_wind_speed))
                     max_wind_speed_entry.grid(row=i, column=1, sticky="nsew")  
                     
                     intersection_time_entry = tk.Entry(self.table_frame, borderwidth=1, relief="solid", justify="center")
