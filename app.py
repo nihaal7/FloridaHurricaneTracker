@@ -5,8 +5,8 @@ from tkinter import ttk
 from tkinter import filedialog
 import tkinter.font as tkFont
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-from Storm import Storm
-from Run_analysis import run_analysis
+from storm import Storm
+from run_analysis import run_analysis
 import os
 
 class AnalysisApp(tk.Tk):
