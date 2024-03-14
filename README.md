@@ -4,7 +4,7 @@
 
 **Task:** The NOAA Best Track Data (HURDAT2) contains historical data on storms, including their paths and intensities. The objective of this analysis is to identify all hurricanes that have made landfall in Florida since 1900 and to generate a report listing their names, dates of landfall, and maximum wind speeds.
 
-https://github.com/nihaal7/FloridaHurricaneTracker/assets/40913961/5957b80f-fce4-478f-b0a8-423153b23557
+https://github.com/nihaal7/FloridaHurricaneTracker/assets/40913961/b0f82b87-4312-4ecb-942e-e22e407226b6
 
 **Submitted by:** Nihaal Subhash
 nihaal.subhash@gmail.com
